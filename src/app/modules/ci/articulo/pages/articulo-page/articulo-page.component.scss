@@ -1,0 +1,142 @@
+.demo-table {
+    width: 100%;
+    overflow: auto !important;
+  }
+.mat-header-cell{
+  font-weight: bold;
+  font-size: 10px;
+  justify-content:left;
+  
+
+}  
+.mat-cell{
+  font-size: 10px;
+  font-weight: bold;
+}
+.mat-column-fechaEmision{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 7% !important;
+  width: 7% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+}
+
+.mat-column-tipoDte{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 5% !important;
+  width: 5% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+}
+
+.mat-column-numeroControl{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 19% !important;
+  width: 19% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+}
+
+.mat-column-selloRecibido{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 20% !important;
+  width: 20% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  border-radius: 10px;
+  justify-content: center;
+  font-weight: bold;
+  border-left:50px !important ;
+
+}
+
+.mat-column-estado{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 5% !important;
+  width: 5% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: bold;
+  border:25px !important ;
+  margin: 5px;
+}
+.mat-column-nombreEmisor{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 18% !important;
+  width: 18% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+}
+.mat-column-documentoEmisor{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 7% !important;
+  width: 7% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+}
+.mat-column-montoTotal{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 5% !important;
+  width: 5% !important;
+  justify-content:right;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+}
+.mat-column-actions{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 4% !important;
+  width: 4% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+}
+  
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+
+.search-div{
+    border: 2;
+}
+
