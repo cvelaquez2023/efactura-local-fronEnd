@@ -3,7 +3,6 @@
 		<input matInput (keyup)="applyFilter($event)" placeholder="Buscar DTE proveedores" #input />
 	</mat-form-field>
 	<div layout="column">
-		
 		<div class="izquierdo">
 			<mat-form-field appearance="outline">
 				<mat-select
@@ -43,6 +42,7 @@
 		</div>
 	</div>
 </form>
+
 
 <mat-table [dataSource]="listaDocumentos" class="mat-elevation-z8 demo-table" matSort>
 	<ng-container matColumnDef="fechaEmision">

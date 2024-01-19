@@ -1,12 +1,12 @@
 <mat-dialog-content class="mat-typography">
-	<h1>Aplicar a Caja Chica sin Vale</h1>
+	<h1>Aplicar a Caja Chica Con Vale</h1>
 	<mat-tab-group>
-		<form class="formulario grey-100" [formGroup]="formAplicarCB">
+		<form class="formulario grey-100" [formGroup]="formAplicarCh">
 			<mat-tab label="General">
 				<div class="generales" fxLayout="row wrap" fxLayoutAlign="center none">
-					<div id="content">
-						<div style="margin-top: 10px">
-							<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="75">
+					<div class="title_box">
+						<div id="content">
+							<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="35">
 								<div id="content">
 									<mat-form-field appearance="outline">
 										<mat-label>Caja Chica</mat-label>
@@ -18,11 +18,21 @@
 									</mat-form-field>
 								</div>
 							</div>
-							<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="25">
+							<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="30">
 								<div id="content">
 									<mat-form-field appearance="outline">
-										<mat-label>Saldo</mat-label>
+										<mat-label>Saldo Caja</mat-label>
 										<input currencyMask [(ngModel)]="saldo" matInput type="text" formControlName="saldo" readonly />
+									</mat-form-field>
+								</div>
+							</div>
+							<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="30">
+								<div id="content" style="margin-left: 5px">
+									<mat-form-field appearance="outline">
+										<mat-label>Vale</mat-label>
+										<mat-select formControlName="vale" (selectionChange)="updateVale($event.value)">
+											<mat-option *ngFor="let item of listaVale" [value]="item.CONSECUTIVO">{{ item.VALE }}</mat-option>
+										</mat-select>
 									</mat-form-field>
 								</div>
 							</div>
@@ -30,51 +40,33 @@
 					</div>
 				</div>
 				<div class="generales" fxLayout="row wrap" fxLayoutAlign="center none">
-					<div id="content">
-						<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="50">
-							<div class="title_box">
+					<div class="title_box">
+						<div id="content">
+							<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="35">
 								<div id="content">
-									<mat-form-field appearance="outline">
-										<mat-label>Consecutivo</mat-label>
-										<input matInput type="text" formControlName="consecutivo" readonly />
-									</mat-form-field>
-									<mat-form-field appearance="outline">
-										<mat-label>Estado</mat-label>
-										<input matInput type="text" formControlName="estado" readonly />
-									</mat-form-field>
 									<mat-form-field appearance="outline">
 										<mat-label>Departamento</mat-label>
 										<mat-select formControlName="departamento">
-											<mat-option *ngFor="let item of listDepartamento" [value]="item.DEPARTAMENTO"
+											<mat-option *ngFor="let item of listDepartamento" [value]="item.DEPARTAMENTO" disabled
 												>{{ item.DEPARTAMENTO }} -- {{ item.DESCRIPCION }}</mat-option
 											>
 										</mat-select>
 									</mat-form-field>
 									<mat-form-field appearance="outline">
-										<mat-label>Concepto</mat-label>
-										<mat-select formControlName="concepto">
-											<mat-option *ngFor="let item of listConcepto" [value]="item.CONCEPTO_VALE"
-												>{{ item.CONCEPTO_VALE }} -- {{ item.DESCRIPCION }}</mat-option
-											>
-										</mat-select>
+										<mat-label>Emision</mat-label>
+										<input matInput type="text" formControlName="emision" readonly />
 									</mat-form-field>
 								</div>
 							</div>
-						</div>
-						<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="50">
-							<div class="title_box">
+							<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="30">
 								<div id="content">
 									<mat-form-field appearance="outline">
-										<mat-label>Beneficiario</mat-label>
-										<mat-select formControlName="beneficionario">
-											<mat-option *ngFor="let item of listBeneficiario" [value]="item.EMPLEADO"
-												>{{ item.EMPLEADO }} -- {{ item.NOMBRE }}</mat-option
+										<mat-label>Concepto</mat-label>
+										<mat-select formControlName="concepto">
+											<mat-option *ngFor="let item of listConcepto" [value]="item.CONCEPTO_VALE" disabled
+												>{{ item.CONCEPTO_VALE }} -- {{ item.DESCRIPCION }}</mat-option
 											>
 										</mat-select>
-									</mat-form-field>
-									<mat-form-field appearance="outline">
-										<mat-label>Emisión</mat-label>
-										<input matInput type="text" formControlName="emision" readonly />
 									</mat-form-field>
 									<mat-form-field appearance="outline">
 										<mat-label>Monto Provisional</mat-label>
@@ -87,11 +79,23 @@
 											readonly
 										/>
 									</mat-form-field>
+								</div>
+							</div>
+							<div fxLayout="row wrap" fxLayoutAlign="center none" fxFlex="30">
+								<div id="content" style="margin-left: 5px">
 									<mat-form-field appearance="outline">
-										<mat-label>Monto Liquidado</mat-label>
+										<mat-label>Beneficiario</mat-label>
+										<mat-select formControlName="beneficionario">
+											<mat-option *ngFor="let item of listBeneficiario" [value]="item.EMPLEADO" disabled
+												>{{ item.EMPLEADO }} -- {{ item.NOMBRE }}</mat-option
+											>
+										</mat-select>
+									</mat-form-field>
+									<mat-form-field appearance="outline">
+										<mat-label>Monto Definitivo</mat-label>
 										<input
 											currencyMask
-											[(ngModel)]="monotl"
+											[(ngModel)]="montol"
 											matInput
 											type="text"
 											formControlName="montoliquidacion"
@@ -222,8 +226,6 @@
 			</mat-tab>
 		</form>
 	</mat-tab-group>
-	
-
 	<div mat-dialog-actions [align]="'end'">
 		<button mat-raised-button color="basic" (click)="cerrar()">Cerrar</button>
 		<button mat-raised-button color="warn" [disabled]="btnAplicar" (click)="clickSave()">Aplicar a CH</button>

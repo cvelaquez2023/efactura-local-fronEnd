@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AddArticuloBodegaPageComponent } from './../add-articulo-bodega-page/add-articulo-bodega-page.component';
 
@@ -14,18 +16,42 @@ import { EditarDtePageComponent } from '../editar-dte-page/editar-dte-page.compo
 import { AplicarCbPageComponent } from '../aplicar-cb-page/aplicar-cb-page.component';
 import { AplicarCpPageComponent } from '../aplicar-cp-page/aplicar-cp-page.component';
 import { AplicarCb2PageComponent } from '../aplicar-cb2-page/aplicar-cb2-page.component';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { ClienteDteApiService } from '@app/modules/dtes/cliente/service/cliente-dte-api.service';
 
+interface Opcion {
+	value: string;
+}
 @Component({
 	selector: 'app-articulo-page',
 	templateUrl: './articulo-page.component.html',
 	styleUrls: ['./articulo-page.component.scss']
 })
 export class ArticuloPageComponent implements OnInit, AfterViewInit {
+	selectedCar!: string;
+	selectedAno!: string;
+	mes = new Date().getMonth() + 1;
+	years: Opcion[] = [];
+	now: Date = new Date();
+	actualYear: number = this.now.getFullYear();
+	yearsSelected: string[] = [
+		(this.actualYear - 4).toString(),
+		(this.actualYear - 3).toString(),
+		(this.actualYear - 2).toString(),
+		(this.actualYear - 1).toString(),
+		this.actualYear.toString()
+	];
+	formGroup!: FormGroup;
 	constructor(
 		private _snotifyService: SnotifyService,
 		private _articuloApiService: ArticuloApiService,
-		private _dialog: MatDialog
-	) {}
+		private _dteApiService: ClienteDteApiService,
+		private _dialog: MatDialog,
+		private _formBuilder: FormBuilder
+	) {
+		this.selectedCar = this.mes.toString();
+		this.selectedAno = this.actualYear.toString();
+	}
 
 	listArticulo = new MatTableDataSource<IResponseDtes>();
 	displayedColumns: string[] = [
@@ -44,12 +70,26 @@ export class ArticuloPageComponent implements OnInit, AfterViewInit {
 	@ViewChild(MatPaginator) paginator!: MatPaginator;
 	searchKey!: 'carlos';
 	ngOnInit(): void {
-		this._loadArticulo();
+		this._loadFormGroup();
+		this.getYears();
 	}
 
 	ngAfterViewInit(): void {
 		this.listArticulo.paginator = this.paginator;
 		this.listArticulo.sort = this.sort;
+	}
+	getYears() {
+		let year = new Date().getFullYear();
+		let yearant = year - 5;
+		for (let i = yearant; i <= year; i++) {
+			this.years.push({ value: i.toString() });
+		}
+	}
+	selectMes(mes: string): void {
+		this._loadDoc(this.anoField.value as string, mes);
+	}
+	selectAno(ano: string): void {
+		this._loadDoc(ano, this.mesField.value as string);
 	}
 	private _loadArticulo(): void {
 		this._articuloApiService.getArticulo().subscribe({
@@ -62,6 +102,27 @@ export class ArticuloPageComponent implements OnInit, AfterViewInit {
 			}
 		});
 	}
+	private _loadFormGroup(): void {
+		this.formGroup = this._formBuilder.group({
+			ano: [],
+			mes: []
+		});
+		this.formGroup.controls['mes'].setValue(this.mes);
+		this.formGroup.controls['ano'].setValue(this.actualYear);
+		this._loadDoc(this.anoField.value as string, this.mesField.value as string);
+	}
+
+	private _loadDoc(ano: string, mes: string): void {
+		this._dteApiService.getProveedor(ano, mes, '03').subscribe({
+			next: (response) => {
+				this.listArticulo.data = response.result;
+			},
+			error: (error) => {
+				console.log('er', error);
+			}
+		});
+	}
+
 	applyFilter(event: Event): void {
 		const filterValue = (event.target as HTMLInputElement).value;
 		this.listArticulo.filter = filterValue.trim().toLowerCase();
@@ -190,5 +251,11 @@ export class ArticuloPageComponent implements OnInit, AfterViewInit {
 					this._loadArticulo();
 				}
 			});
+	}
+	get anoField(): AbstractControl {
+		return this.formGroup.get('ano')!;
+	}
+	get mesField(): AbstractControl {
+		return this.formGroup.get('mes')!;
 	}
 }

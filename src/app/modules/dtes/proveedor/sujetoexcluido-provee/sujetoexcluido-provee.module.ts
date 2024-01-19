@@ -9,9 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { AngularMaterialModule } from '@app/angular-material-modulo';
 import { MatInputModule } from '@angular/material/input';
 import { AddSujetoExcluidoComponent } from './pages/add-sujeto-excluido/add-sujeto-excluido.component';
+import { AddSujetoExcluidoCHComponent } from './pages/add-sujeto-excluido-ch/add-sujeto-excluido-ch.component';
 
 @NgModule({
-	declarations: [ListarSujetoExcluidoComponent, AddSujetoExcluidoComponent],
+	declarations: [ListarSujetoExcluidoComponent, AddSujetoExcluidoComponent, AddSujetoExcluidoCHComponent],
 	imports: [
 		CommonModule,
 		SujetoexcluidoProveeRoutingModule,

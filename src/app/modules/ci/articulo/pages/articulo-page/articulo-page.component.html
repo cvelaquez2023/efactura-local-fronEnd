@@ -1,10 +1,50 @@
 <div class="search-div" fxLayout="row" fxLayoutAlign="end end">
 	<button mat-raised-button color="warn" (click)="openDialog()"><mat-icon>add</mat-icon>Cargar JSON</button>
 </div>
-<form class="buscar">
+
+<form class="buscar" [formGroup]="formGroup">
 	<mat-form-field class="full-with" appearance="fill">
 		<input matInput (keyup)="applyFilter($event)" placeholder="Buscar DTE Proveedor" #input />
 	</mat-form-field>
+	<div layout="column">
+		<div class="izquierdo">
+			<mat-form-field appearance="outline">
+				<mat-select
+					formControlName="mes"
+					matNativeControl
+					[(ngModel)]="selectedCar"
+					(selectionChange)="selectMes(selectedCar)"
+					name="car"
+				>
+					<mat-option value="1">Enero</mat-option>
+					<mat-option value="2">Febrero</mat-option>
+					<mat-option value="3">Marzo</mat-option>
+					<mat-option value="4">Abril</mat-option>
+					<mat-option value="5">Mayo</mat-option>
+					<mat-option value="6">Junio</mat-option>
+					<mat-option value="7">Julio</mat-option>
+					<mat-option value="8">Agosto</mat-option>
+					<mat-option value="9">Septiembre</mat-option>
+					<mat-option value="10">Octubre</mat-option>
+					<mat-option value="11">Noviembre</mat-option>
+					<mat-option value="12">Diciembre</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="derecho">
+			<mat-form-field appearance="outline">
+				<mat-select
+					placeholder="Año"
+					matNativeControl
+					formControlName="ano"
+					[(ngModel)]="selectedAno"
+					(selectionChange)="selectAno(selectedAno)"
+				>
+					<mat-option *ngFor="let year of years" [value]="year.value">{{ year.value }}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+	</div>
 </form>
 
 <mat-table [dataSource]="listArticulo" matSort class="mat-elevation-z8 demo-table">

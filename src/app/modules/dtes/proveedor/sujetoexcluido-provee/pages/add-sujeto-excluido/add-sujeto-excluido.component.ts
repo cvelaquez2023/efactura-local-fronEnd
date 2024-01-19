@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { SujetoexcluidoProveedorService } from './../../services/sujetoexcluido-proveedor.service';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -13,6 +15,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VendedorApiService } from '@app/modules/as/tablas/funcionarios/vendedores/services/vendedor-api.service';
 import { SnotifyPosition, SnotifyService } from 'ng-snotify';
+import { IResponseDTE14 } from '../../model/sujetoExcluido_DTE_interface';
 
 @Component({
 	selector: 'app-add-sujeto-excluido',
@@ -27,12 +30,14 @@ export class AddSujetoExcluidoComponent implements OnInit {
 	_total: number = 0.0;
 	activo = true;
 	_fecha = new Date();
+	_dte: string = '';
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	proveedor: any;
 	valueChange: any;
 	constructor(
 		private _formBuilder: FormBuilder,
 		private _vendedorApiService: VendedorApiService,
+		private _sujetoExcluidoApiService: SujetoexcluidoProveedorService,
 		private _snotifyService: SnotifyService,
 		// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 		@Inject(MAT_DIALOG_DATA) public ediData: any,
@@ -69,34 +74,68 @@ export class AddSujetoExcluidoComponent implements OnInit {
 			this._snotifyService.error('El total tiene que ser Mayor a Cero', { position: SnotifyPosition.rightTop });
 			return;
 		}
-		let tipo = '';
-		let doc = this.duiField.value;
-		if (doc.length <= 10) {
-			tipo = '13';
-		} else {
-			tipo = '36';
-		}
-		const data = {
-			tipoDocumento: '13',
-			numDocumento: this.duiField.value,
-			nombre: this.nombreField.value,
-			direccion: {
-				departamento: this.departamentoField.value,
-				municipio: this.municipioField.value,
-				complemento: this.direcionField.value
-			},
-			telefon: this.telefonoField.value,
-			correo: this.correoField.value,
-			aplicacion: {
-				descripcion: this.aplicaField.value,
-				monto: this.montoField.value,
-				renta: this.rentaField.value,
-				total: this.totalField.value,
-				fecha: this.fechaField.value
+
+		this._sujetoExcluidoApiService.getConsecutivo('DTE14').subscribe({
+			next: (response) => {
+				if (response.success === true) {
+					this._dte = response.result[0].ULTIMO_VALOR;
+					let tipo = '';
+					let doc = this.duiField.value;
+					if (doc.length <= 10) {
+						tipo = '13';
+					} else {
+						tipo = '36';
+					}
+					const renta = this.rentaField.value.replace('$', '');
+					const data: IResponseDTE14 = {
+						tipoDocumento: '13',
+						numDocumento: this.duiField.value,
+						nombre: this.nombreField.value,
+						direccion: {
+							departamento: this.departamentoField.value,
+							municipio: this.municipioField.value,
+							complemento: this.direcionField.value
+						},
+						telefono: this.telefonoField.value,
+						correo: this.correoField.value,
+						aplicacion: {
+							descripcion: this.aplicacionField.value,
+							monto: parseFloat(this.montoField.value),
+							renta: parseFloat(renta),
+							total: parseFloat(this.totalField.value),
+							fecha: this.fechaField.value,
+							dte: this._dte
+						},
+						hacienda: 'N'
+					};
+					this.enviarData(data);
+				}
 			}
-		};
-		console.log(data);
+		});
+
 		//enviamos a api
+	}
+
+	private enviarData(data: IResponseDTE14): void {
+		this._sujetoExcluidoApiService.postEnvioDTE(data).subscribe({
+			next: (response) => {
+				if (response.success === true) {
+					this._snotifyService.info('El registro se guardo sin problema');
+					this.actualizarCorrelativo();
+					this._dialogRef.close('save');
+				} else {
+					this._snotifyService.error('Existio un problemas');
+				}
+			}
+		});
+	}
+	//actualziamos correlativo
+	private actualizarCorrelativo(): void {
+		this._sujetoExcluidoApiService.postConsecutivo('DTE14').subscribe({
+			next: (response) => {
+				const guar = 'se guarda sin problema';
+			}
+		});
 	}
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 	onChangeDui($event: any) {

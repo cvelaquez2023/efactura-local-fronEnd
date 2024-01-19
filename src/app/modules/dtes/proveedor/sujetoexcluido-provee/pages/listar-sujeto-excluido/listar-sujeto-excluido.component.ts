@@ -18,6 +18,9 @@ import { ListaObservacionesComponent } from '@app/modules/dtes/cliente/pages/lis
 import { ClienteDteApiService } from '@app/modules/dtes/cliente/service/cliente-dte-api.service';
 import { SnotifyPosition, SnotifyService } from 'ng-snotify';
 import { AddSujetoExcluidoComponent } from '../add-sujeto-excluido/add-sujeto-excluido.component';
+import { IResponseDTE14 } from '../../model/sujetoExcluido_DTE_interface';
+import { SujetoexcluidoProveedorService } from '../../services/sujetoexcluido-proveedor.service';
+import { AddSujetoExcluidoCHComponent } from '../add-sujeto-excluido-ch/add-sujeto-excluido-ch.component';
 interface Opcion {
 	value: string;
 }
@@ -45,7 +48,8 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 		private _snotifyService: SnotifyService,
 		private _dteApiService: ClienteDteApiService,
 		private _dialog: MatDialog,
-		private _formBuilder: FormBuilder
+		private _formBuilder: FormBuilder,
+		private _sujetoExluidoApiService: SujetoexcluidoProveedorService
 	) {
 		this.selectedCar = this.mes.toString();
 		this.selectedAno = this.actualYear.toString();
@@ -82,6 +86,7 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 	private _loadDoc(ano: string, mes: string): void {
 		this._dteApiService.getProveedor(ano, mes, '14').subscribe({
 			next: (response) => {
+				console.log(response.result);
 				this.listaDocumentos.data = response.result;
 			},
 			error: (error) => {
@@ -114,7 +119,7 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 			})
 			.afterClosed()
 			.subscribe((val) => {
-				if (val == 'save') {
+				if (val === 'save') {
 					this._loadDoc(this.anoField.value as string, this.mesField.value as string);
 				}
 			});
@@ -161,17 +166,52 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 			});
 	}
 	clickCH(element: any): void {
-		this._dteApiService.postDteMh(element.Dte).subscribe({
-			next: (response) => {
-				if (response.success) {
-					this._snotifyService.info(response.errors[0], { position: SnotifyPosition.rightTop });
+		this._dialog
+			.open(AddSujetoExcluidoCHComponent, {
+				width: '50%',
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				data: element
+			})
+			.afterClosed()
+			.subscribe((val) => {
+				if (val === 'update') {
 					this._loadDoc(this.anoField.value as string, this.mesField.value as string);
-				} else {
-					this._snotifyService.error(response.errors[0], { position: SnotifyPosition.rightTop });
 				}
+			});
+	}
+	clickCP(element: any): void {
+		const data: IResponseDTE14 = {
+			tipoDocumento: '13',
+			numDocumento: 'ND',
+			nombre: 'ND',
+			direccion: {
+				departamento: 'ND',
+				municipio: 'ND',
+				complemento: 'ND'
 			},
-			error: (error) => {
-				console.log('er', error);
+			telefono: 'ND',
+			correo: 'ND',
+			aplicacion: {
+				descripcion: 'ND',
+				monto: 0.0,
+				renta: 0.0,
+				total: 0.0,
+				fecha: '1980-01-01',
+				dte: element.Dte
+			},
+			hacienda: 'S'
+		};
+		this.envioMH(data);
+	}
+	private envioMH(data: IResponseDTE14): void {
+		console.log(data);
+		this._sujetoExluidoApiService.postEnvioDTE(data).subscribe({
+			next: (response) => {
+				if (response.success === true) {
+					this._snotifyService.info('Se Envio sin problema');
+				} else {
+					this._snotifyService.error('El Envio Hacienda dio un Problema');
+				}
 			}
 		});
 	}

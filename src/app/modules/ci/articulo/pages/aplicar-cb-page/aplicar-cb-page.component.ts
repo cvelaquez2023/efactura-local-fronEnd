@@ -25,7 +25,6 @@ import { ArticuloApiService } from '../../service/articulo-api.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SnotifyPosition, SnotifyService } from 'ng-snotify';
 import { DatePipe } from '@angular/common';
-import { debug } from 'console';
 
 @Component({
 	selector: 'app-aplicar-cb-page',
@@ -65,7 +64,6 @@ export class AplicarCbPageComponent {
 		// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 		@Inject(MAT_DIALOG_DATA) public editData: any,
 		private _dialogRef: MatDialogRef<AplicarCbPageComponent>,
-		private dialog: MatDialog,
 		private _snotifyService: SnotifyService
 	) {
 		this._loadFormGroup(),

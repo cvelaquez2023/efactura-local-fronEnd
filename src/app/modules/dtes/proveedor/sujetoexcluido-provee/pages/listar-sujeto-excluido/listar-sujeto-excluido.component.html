@@ -104,9 +104,27 @@
 						<mat-icon>edit</mat-icon>
 						<span>Leer Observaciones</span>
 					</button>
+					<button mat-menu-item (click)="clickCP(element)">
+						<mat-icon>note</mat-icon>
+						<span>Reenviar MH y CP</span>
+					</button>
 					<button mat-menu-item (click)="clickCH(element)">
 						<mat-icon>note</mat-icon>
-						<span>Reenviar MH</span>
+						<span>Reenviar MH y CH</span>
+					</button>
+				</div>
+				<div *ngIf="element.estado === 'PENDIENTE'">
+					<button mat-menu-item (click)="clickImprimir(element)">
+						<mat-icon>note</mat-icon>
+						<span>Imprimir </span>
+					</button>
+					<button mat-menu-item (click)="clickCH(element)">
+						<mat-icon>note</mat-icon>
+						<span>Enviar MH y CP </span>
+					</button>
+					<button mat-menu-item (click)="clickCH(element)">
+						<mat-icon>note</mat-icon>
+						<span>Enviar MH y CH </span>
 					</button>
 				</div>
 				<div *ngIf="element.estado === 'PROCESADO'">

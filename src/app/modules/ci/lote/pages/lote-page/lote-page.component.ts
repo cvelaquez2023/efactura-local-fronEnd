@@ -74,7 +74,6 @@ export class LotePageComponent implements OnInit, AfterViewInit {
 
 	ngOnInit(): void {
 		this._loadFormGroup();
-
 		this.getYears();
 	}
 
