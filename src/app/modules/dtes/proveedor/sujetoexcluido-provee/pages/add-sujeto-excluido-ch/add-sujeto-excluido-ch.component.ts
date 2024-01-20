@@ -247,8 +247,8 @@ export class AddSujetoExcluidoCHComponent {
 			return;
 		}
 		const d = new Date();
-		const n = d.getFullYear().toString().substr(2);
-
+		const n = d.getFullYear();
+		const ano = n.toString();
 		const vale = this.valeField.value as number;
 		const conse = this.listaVale.find((r) => r.CONSECUTIVO == vale)?.CONSECUTIVO || 0;
 
@@ -258,7 +258,7 @@ export class AddSujetoExcluidoCHComponent {
 			_centro_costo: this.CentroCostoField.value as string,
 			_cuenta_contable: this.CuentaContableField.value as string,
 			_nit: this.nitField.value as string,
-			_doc_soporte: (this.dteField.value as string) + '-' + n,
+			_doc_soporte: (this.dteField.value as string) + '-' + ano,
 			_tipo: this.tipoDocField.value as string,
 			_monto: this.totalField.value as number,
 			_monot_vale: this.montoprovisionField.value as number,
@@ -278,13 +278,12 @@ export class AddSujetoExcluidoCHComponent {
 			_base_impuesto2: 0.0,
 			_id: this.editData.Dte_Id,
 			_montoProvisional: this.montoprovisionField.value as number,
-			_montoDefinitivo: this.montoliquidacionField.value as number
+			_montoDefinitivo: this.montoliquidacionField.value as number,
+			_procesaMH: 'N'
 		};
 		//guadarmos el detalle en doc_soporte
 
-		console.log(docsSoporte);
-
-		this._service.posDocSoporte(docsSoporte).subscribe({
+		this._service.posDocSoporte14(docsSoporte).subscribe({
 			next: (response) => {
 				if (response.success) {
 					this._snotifyService.success('Registro Guardado con Exito', {

@@ -86,7 +86,6 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 	private _loadDoc(ano: string, mes: string): void {
 		this._dteApiService.getProveedor(ano, mes, '14').subscribe({
 			next: (response) => {
-				console.log(response.result);
 				this.listaDocumentos.data = response.result;
 			},
 			error: (error) => {

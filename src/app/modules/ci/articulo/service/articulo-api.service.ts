@@ -45,8 +45,8 @@ const URL_BENEFICIARIO = environment.host + '/empleado';
 
 const URL_VALE = environment.host + '/vale';
 const URL_DOCSOPORTE = environment.host + '/docuSoporte';
+const URL_DOCSOPORTE_DTE14 = environment.host + '/docuSoporte/dte14';
 const URL_VALE_CAJACHICA = environment.host + '/vale';
-
 
 @Injectable({
 	providedIn: 'root'
@@ -151,6 +151,9 @@ export class ArticuloApiService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	posDocSoporte(documento: any): Observable<IResponse<any>> {
 		return this._httpClient.post<IResponse<number>>(URL_DOCSOPORTE, documento);
+	}
+	posDocSoporte14(documento: any): Observable<IResponse<any>> {
+		return this._httpClient.post<IResponse<number>>(URL_DOCSOPORTE_DTE14, documento);
 	}
 	putDts(idDte: number, selloRecibido: string): Observable<IResponse<number>> {
 		// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
