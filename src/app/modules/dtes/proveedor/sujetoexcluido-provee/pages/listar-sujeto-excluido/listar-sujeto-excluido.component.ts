@@ -59,6 +59,7 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 		'fechaEmision',
 		'tipoDte',
 		'numeroControl',
+		'modulo',
 		'selloRecibido',
 		'estado',
 		'nombreEmisor',
@@ -86,6 +87,7 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 	private _loadDoc(ano: string, mes: string): void {
 		this._dteApiService.getProveedor(ano, mes, '14').subscribe({
 			next: (response) => {
+				console.log(response.result);
 				this.listaDocumentos.data = response.result;
 			},
 			error: (error) => {
@@ -198,12 +200,12 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 				fecha: '1980-01-01',
 				dte: element.Dte
 			},
-			hacienda: 'S'
+			hacienda: 'S',
+			origen: 'CP'
 		};
 		this.envioMH(data);
 	}
 	private envioMH(data: IResponseDTE14): void {
-		console.log(data);
 		this._sujetoExluidoApiService.postEnvioDTE(data).subscribe({
 			next: (response) => {
 				if (response.success === true) {

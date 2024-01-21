@@ -62,6 +62,10 @@
 		<mat-header-cell *matHeaderCellDef mat-sort-header>Dte</mat-header-cell>
 		<mat-cell *matCellDef="let element">{{ element.Dte }}</mat-cell>
 	</ng-container>
+	<ng-container matColumnDef="modulo">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Modulo</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element.mudulo }}</mat-cell>
+	</ng-container>
 	<ng-container matColumnDef="selloRecibido">
 		<mat-header-cell *matHeaderCellDef mat-sort-header>Sello Recibido</mat-header-cell>
 		<mat-cell

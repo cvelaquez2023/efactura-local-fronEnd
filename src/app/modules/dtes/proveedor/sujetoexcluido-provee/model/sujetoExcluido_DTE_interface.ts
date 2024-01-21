@@ -22,4 +22,5 @@ export interface IResponseDTE14 {
 		dte: string;
 	};
 	hacienda: string;
+	origen: string;
 }

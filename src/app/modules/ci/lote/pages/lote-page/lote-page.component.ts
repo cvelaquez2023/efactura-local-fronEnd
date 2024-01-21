@@ -88,7 +88,6 @@ export class LotePageComponent implements OnInit, AfterViewInit {
 	private _loadDoc(ano: string, mes: string): void {
 		this._dteApiService.getProveedor(ano, mes, '07').subscribe({
 			next: (response) => {
-				
 				this.listaDocumentos.data = response.result;
 			},
 			error: (error) => {

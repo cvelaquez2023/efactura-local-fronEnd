@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { SujetoexcluidoProveedorService } from './../../services/sujetoexcluido-proveedor.service';
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -22,7 +23,7 @@ import { IResponseDTE14 } from '../../model/sujetoExcluido_DTE_interface';
 	templateUrl: './add-sujeto-excluido.component.html',
 	styleUrls: ['./add-sujeto-excluido.component.scss']
 })
-export class AddSujetoExcluidoComponent implements OnInit {
+export class AddSujetoExcluidoComponent {
 	vendedorForm!: FormGroup;
 	_dui: string = '';
 	_renta: number = 0.0;
@@ -33,6 +34,7 @@ export class AddSujetoExcluidoComponent implements OnInit {
 	_dte: string = '';
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	proveedor: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	valueChange: any;
 	constructor(
 		private _formBuilder: FormBuilder,
@@ -64,7 +66,6 @@ export class AddSujetoExcluidoComponent implements OnInit {
 		});
 	}
 
-	ngOnInit(): void {}
 	clickSave(): void {
 		if (this.vendedorForm.invalid) {
 			this._snotifyService.error('Lo campos son Obligatorios', { position: SnotifyPosition.rightTop });
@@ -106,7 +107,8 @@ export class AddSujetoExcluidoComponent implements OnInit {
 							fecha: this.fechaField.value,
 							dte: this._dte
 						},
-						hacienda: 'N'
+						hacienda: 'N',
+						origen: 'CP'
 					};
 					this.enviarData(data);
 				}
@@ -158,6 +160,22 @@ export class AddSujetoExcluidoComponent implements OnInit {
 				}
 			}
 		});
+	}
+	validateFormat(event: any) {
+		let key;
+		if (event.type === 'paste') {
+			key = event.clipboardData.getData('text/plain');
+		} else {
+			key = event.keyCode;
+			key = String.fromCharCode(key);
+		}
+		const regex = /[0-9]|\./;
+		if (!regex.test(key)) {
+			event.returnValue = false;
+			if (event.preventDefault) {
+				event.preventDefault();
+			}
+		}
 	}
 
 	updateCurrencyField(value: string): void {

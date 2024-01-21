@@ -23,6 +23,8 @@ import {
 } from '@app/modules/ci/articulo/model/articulo-api-model-interface';
 import { ArticuloApiService } from '@app/modules/ci/articulo/service/articulo-api.service';
 import { SnotifyPosition, SnotifyService } from 'ng-snotify';
+import { IResponseDTE14 } from '../../model/sujetoExcluido_DTE_interface';
+import { SujetoexcluidoProveedorService } from '../../services/sujetoexcluido-proveedor.service';
 
 @Component({
 	selector: 'app-add-sujeto-excluido-ch',
@@ -58,6 +60,7 @@ export class AddSujetoExcluidoCHComponent {
 	constructor(
 		private _formBuider: FormBuilder,
 		private _service: ArticuloApiService,
+		private _sujetoExluidoApiService: SujetoexcluidoProveedorService,
 		// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 		@Inject(MAT_DIALOG_DATA) public editData: any,
 		private _dialogRef: MatDialogRef<AddSujetoExcluidoCHComponent>,
@@ -110,7 +113,6 @@ export class AddSujetoExcluidoCHComponent {
 		this._service.getDteCp(this.editData.Dte_Id as number).subscribe({
 			next: (response) => {
 				this.datoCp = response.result;
-				console.log(this.datoCp);
 
 				//datalle 1
 				this.formAplicarCh.controls['fechadoc'].setValue(this.datoCp[0].fechaDoc);
@@ -205,7 +207,7 @@ export class AddSujetoExcluidoCHComponent {
 			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_CAJA || '');
 		this.formAplicarCh
 			.get('montoliquidacion')
-			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_VALE || '');
+			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_VALE || 0);
 
 		const disponible = (this.montoprovisionField.value as number) - (this.montoliquidacionField.value as number);
 		if (disponible < this.total) {
@@ -240,12 +242,53 @@ export class AddSujetoExcluidoCHComponent {
 			}
 		});
 	}
-
+	//Para enviar a caja chica primero enviamos a MH despues que todo fue exitoso con MH mandamos a Caja chica
 	clickSave(): void {
+		//1 Conseguimos de DTE
 		if (this.formAplicarCh.invalid) {
 			this._snotifyService.error('Todos los campos son obligatorios', { position: SnotifyPosition.rightTop });
 			return;
 		}
+		const dte = this.dteField.value;
+		const data: IResponseDTE14 = {
+			tipoDocumento: '13',
+			numDocumento: 'ND',
+			nombre: 'ND',
+			direccion: {
+				departamento: 'ND',
+				municipio: 'ND',
+				complemento: 'ND'
+			},
+			telefono: 'ND',
+			correo: 'ND',
+			aplicacion: {
+				descripcion: 'ND',
+				monto: 0.0,
+				renta: 0.0,
+				total: 0.0,
+				fecha: '1980-01-01',
+				dte: dte
+			},
+			hacienda: 'S',
+			origen: 'CH'
+		};
+		this.envioMH(data);
+	}
+	private envioMH(data: IResponseDTE14): void {
+		this._sujetoExluidoApiService.postEnvioDTE(data).subscribe({
+			next: (response) => {
+				if (response.success === true) {
+					//Enviamsos a guardar a Caja Chicca
+					this.clickSave2();
+					this._dialogRef.close('update');
+				} else {
+					this._snotifyService.error('El Envio Hacienda dio un Problema');
+				}
+			}
+		});
+	}
+
+	clickSave2(): void {
 		const d = new Date();
 		const n = d.getFullYear();
 		const ano = n.toString();
@@ -278,12 +321,11 @@ export class AddSujetoExcluidoCHComponent {
 			_base_impuesto2: 0.0,
 			_id: this.editData.Dte_Id,
 			_montoProvisional: this.montoprovisionField.value as number,
-			_montoDefinitivo: this.montoliquidacionField.value as number,
-			_procesaMH: 'N'
+			_montoDefinitivo: this.montoliquidacionField.value as number
 		};
 		//guadarmos el detalle en doc_soporte
 
-		this._service.posDocSoporte14(docsSoporte).subscribe({
+		this._service.posDocSoporte(docsSoporte).subscribe({
 			next: (response) => {
 				if (response.success) {
 					this._snotifyService.success('Registro Guardado con Exito', {
@@ -345,6 +387,7 @@ export class AddSujetoExcluidoCHComponent {
 		var fecha = string.split('/');
 		return fecha[2] + '/' + fecha[1] + '/' + fecha[0];
 	}
+
 	get impuestoField(): AbstractControl {
 		return this.formAplicarCh.get('impuesto')!;
 	}

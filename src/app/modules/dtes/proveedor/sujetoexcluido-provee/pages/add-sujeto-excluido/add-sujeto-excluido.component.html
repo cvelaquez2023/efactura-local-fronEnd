@@ -98,6 +98,7 @@
 								style="font-weight: bold; color: black; font-size: large; text-transform: uppercase"
 								type="date"
 								[ngModel]="_fecha | date: 'yyyy-MM-dd'"
+								readonly
 							/>
 						</mat-form-field>
 					</div>
@@ -121,6 +122,7 @@
 								style="font-weight: bold; color: black; font-size: large; text-transform: uppercase"
 								[ngModel]="_monto | currency: 'USD'"
 								(ngModelChange)="updateCurrencyField($event)"
+								(keypress)="validateFormat($event)"
 							/>
 						</mat-form-field>
 					</div>
