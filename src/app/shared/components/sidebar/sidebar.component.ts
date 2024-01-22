@@ -35,6 +35,6 @@ export class SidebarComponent implements OnInit {
 		void this._router.navigateByUrl('/contingencia');
 	}
 	Usuarioclick(): void {
-		void this._router.navigateByUrl('/usuario');
+		void this._router.navigateByUrl('/usuarios');
 	}
 }

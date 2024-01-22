@@ -7,7 +7,9 @@ import {
 	IResponseLogin,
 	IRequestResetPassword,
 	IRequestChangePassword,
-	IResponseConjunto
+	IResponseConjunto,
+	IResponseListarUsuario,
+	IRequestGuardarUser
 } from './user-api-model-interface';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -19,11 +21,17 @@ export const URL_CONJUNTO = environment.host + '/ERPADMIN/Usuario/Conjunto';
 const URL_SEND_TOKEN_RESET_PASSWORD = environment.host + '/ERPADMIN/Usuario/SendTokenToResetPassword';
 const URL_RESET_PASSWORD = environment.host + '/ERPADMIN/Usuario/ResetPassword';
 const URL_CHANGE_PASSWORD = environment.host + '/ERPMADIN/Usuario/ChangePassword';
+const URL_USER_LIST = environment.host + '/auth/listarUsuario';
+const URL_USER_REGISTER = environment.host + '/auth/register';
 @Injectable({
 	providedIn: 'root'
 })
 export class UserApiService {
 	constructor(private _httpClient: HttpClient) {}
+	getListarUsuario(): Observable<IResponse<IResponseListarUsuario[]>> {
+		return this._httpClient.get<IResponse<IResponseListarUsuario[]>>(URL_USER_LIST);
+	}
+
 	login(login: IRequestLogin): Observable<IResponse<IResponseLogin>> {
 		// eslint-disable-next-line prefer-const
 		let url = URL_LOGIN;
@@ -40,6 +48,9 @@ export class UserApiService {
 
 	register(request: IRequestRegister): Observable<IResponse<string>> {
 		return this._httpClient.post<IResponse<string>>(URL_REGISTER, request);
+	}
+	postUsuario(data: IRequestGuardarUser): Observable<IResponse<string>> {
+		return this._httpClient.post<IResponse<string>>(URL_USER_REGISTER, data);
 	}
 	sendTokenToResestPassword(email: string): Observable<IResponse<string>> {
 		return this._httpClient.post<IResponse<string>>(URL_SEND_TOKEN_RESET_PASSWORD, { email });

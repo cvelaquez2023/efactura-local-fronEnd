@@ -21,6 +21,10 @@ const routes: Routes = [
 	{
 		path: PATHS_DTE_PAGES.invalidacionDte.onLypath,
 		loadChildren: () => import('../dtes/invalidaciones/invalidaciones.module').then((m) => m.InvalidacionesModule)
+	},
+	{
+		path: PATHS_DTE_PAGES.usuarioDte.onLypath,
+		loadChildren: () => import('../dtes/usuarios/usuarios.module').then((m) => m.UsuariosModule)
 	}
 ];
 @NgModule({

@@ -58,7 +58,9 @@ export class TreeComponent implements OnInit {
 			case '_listarInvalidaciones':
 				void this._router.navigateByUrl(PATH_AS_PAGES.listarInvalidacion.withSlash);
 				break;
-
+			case '_usuarios':
+				void this._router.navigateByUrl(PATH_AS_PAGES.listarInvalidacion.withSlash);
+				break;
 			default:
 				break;
 		}

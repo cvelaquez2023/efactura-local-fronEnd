@@ -1,5 +1,5 @@
 const ModuloPage = 'dte';
-const clientePage = 'cliente';
+const clientePage = 'clientes';
 const proveedorPage = 'proveedor';
 const invalidacionPage = 'invalidaciones';
 const contigenciaPage = 'contingencia';

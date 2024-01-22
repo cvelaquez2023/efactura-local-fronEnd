@@ -11,7 +11,7 @@ interface CiNode {
 
 const TREE_DATA: CiNode[] = [
 	{
-		name: 'Contingencia',
+		name: 'Contingencias',
 		constante: 'demo',
 		children: []
 	}

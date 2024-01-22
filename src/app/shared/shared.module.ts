@@ -24,6 +24,7 @@ import { CuentaTipoPipe } from './pipe/cuenta-tipo.pipe';
 import { TreeClienteComponent } from './components/tree/cliente/tree-cliente/tree-cliente.component';
 import { TreeProveedorComponent } from './components/tree/proveedore/tree-proveedor/tree-proveedor.component';
 import { TreeDteComponent } from './components/tree/dte/tree-dte/tree-dte.component';
+import { TreeUsuarioComponent } from './components/tree/usuarios/tree-usuario/tree-usuario.component';
 
 @NgModule({
 	declarations: [
@@ -38,7 +39,8 @@ import { TreeDteComponent } from './components/tree/dte/tree-dte/tree-dte.compon
 		CuentaTipoPipe,
 		TreeClienteComponent,
 		TreeProveedorComponent,
-  TreeDteComponent
+		TreeDteComponent,
+		TreeUsuarioComponent
 	],
 	imports: [
 		MatListModule,

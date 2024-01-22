@@ -1,3 +1,11 @@
+export interface IResponseListarUsuario {
+	usuario_id: number;
+	email: string;
+	nombre: string;
+	activo: boolean;
+	rol: string;
+	confirm: boolean;
+}
 export interface IRequestLogin {
 	email: string;
 	password: string;
@@ -81,6 +89,13 @@ export interface IRequestRegister {
 	password: string;
 	confirmPassword: string;
 	age?: number;
+}
+export interface IRequestGuardarUser {
+	email: string;
+	nombres: string;
+	password: string;
+	activo: boolean;
+	rol: string;
 }
 //#endregion
 

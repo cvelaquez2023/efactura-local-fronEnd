@@ -43,8 +43,3 @@ export const PATH_AS_PAGES = {
 	listarInvalidacion: { withSlash: `/${modulo_AS}/${listarInvalidacionPage}`, onlyPath: listarInvalidacionPage },
 	listarDte: { withSlash: `/${modulo_AS}/${listarDtePage}`, onlyPath: listarDtePage }
 };
-
-
-//#endregion
-
-

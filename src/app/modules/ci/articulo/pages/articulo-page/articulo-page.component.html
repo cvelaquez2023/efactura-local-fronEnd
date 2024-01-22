@@ -51,7 +51,7 @@
 	<ng-container matColumnDef="fechaEmision">
 		<mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Emi.</mat-header-cell>
 		<mat-cell *matCellDef="let element">
-			{{ element.fechaemision | date: 'd-M-yyyy' }}
+			{{ element.fechaemision }}
 		</mat-cell>
 	</ng-container>
 	<ng-container matColumnDef="tipoDte">

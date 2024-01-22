@@ -8,6 +8,7 @@ import { SnotifyService, SnotifyPosition } from 'ng-snotify';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { AddComponent } from '../add/add.component';
 
+
 @Component({
 	selector: 'app-vendedor-page',
 	templateUrl: './vendedor-page.component.html',

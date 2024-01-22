@@ -1,6 +1,8 @@
 <div class="search-div" fxLayout="row" fxLayoutAlign="end end">
 	<button mat-raised-button color="warn" (click)="openDialog()"><mat-icon>add</mat-icon>Crear</button>
 </div>
+
+
 <form class="buscar">
 	<mat-form-field class="full-with" appearance="fill">
 		<input matInput (keyup)="applyFilter($event)" placeholder="Buscar Vendedor" #input />
