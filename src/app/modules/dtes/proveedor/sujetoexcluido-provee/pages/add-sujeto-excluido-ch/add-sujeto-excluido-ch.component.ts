@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable no-var */
@@ -57,6 +58,7 @@ export class AddSujetoExcluidoCHComponent {
 	emsion = '';
 	btnAplicar = false;
 	valeId = 0;
+	_filtro: string = '';
 	constructor(
 		private _formBuider: FormBuilder,
 		private _service: ArticuloApiService,
@@ -125,17 +127,20 @@ export class AddSujetoExcluidoCHComponent {
 				this.formAplicarCh.controls['proveedor'].setValue(this.datoCp[0].nombre);
 
 				//this.formAplicarCh.controls['montoprovision'].setValue(this.datoCp[0].monto);
-				this.formAplicarCh.controls['subtotal'].setValue(this.datoCp[0].subtotal);
+				this.formAplicarCh.controls['subtotal'].setValue(this.editData.montoTotal);
 				this.formAplicarCh.controls['fovial'].setValue(this.datoCp[0].fovial);
 				this.formAplicarCh.controls['cotrans'].setValue(this.datoCp[0].cotrans);
 				this.formAplicarCh.controls['iva'].setValue(this.datoCp[0].impuesto1);
-				this.formAplicarCh.controls['total'].setValue(this.datoCp[0].monto);
+				this.formAplicarCh.controls['total'].setValue(this.editData.montoTotal);
 				this.formAplicarCh.controls['detalle'].setValue(this.datoCp[0].selloRecibido);
-				this.formAplicarCh.controls['emision'].setValue(hoy);
+				this.formAplicarCh.controls['emision'].setValue(this.editData.fechaemision);
 			}
 		});
 	}
 
+	onkey(value: any) {
+		console.log(value);
+	}
 	selectionConcepto(conpceto: any): void {
 		this.formAplicarCh
 			.get('cuentaContable')
@@ -202,9 +207,7 @@ export class AddSujetoExcluidoCHComponent {
 		const fecha = this.listaVale.find((r) => r.CONSECUTIVO == vale)?.FECHA_EMISION || '';
 		const fechaformat = this.pipe.transform(fecha, 'dd/MM/YYY');
 		this.formAplicarCh.get('emision')?.setValue(fechaformat);
-		this.formAplicarCh
-			.get('montoprovision')
-			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_CAJA || '');
+		this.formAplicarCh.get('montoprovision')?.setValue(this.editData.montoTotal);
 		this.formAplicarCh
 			.get('montoliquidacion')
 			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_VALE || 0);
@@ -214,7 +217,7 @@ export class AddSujetoExcluidoCHComponent {
 			this._snotifyService.error('El Monto de documento es mayor a lo Disponible', {
 				position: SnotifyPosition.rightTop
 			});
-			this.btnAplicar = true;
+			//	this.btnAplicar = true;
 			return;
 		} else {
 			this.btnAplicar = false;
@@ -279,7 +282,10 @@ export class AddSujetoExcluidoCHComponent {
 			next: (response) => {
 				if (response.success === true) {
 					//Enviamsos a guardar a Caja Chicca
-					this.clickSave2();
+					// eslint-disable-next-line @typescript-eslint/no-unused-vars
+					console.log(response.result);
+					const selloRecibido = response.result[0].selloRecibido;
+					this.clickSave2(selloRecibido);
 					this._dialogRef.close('update');
 				} else {
 					this._snotifyService.error('El Envio Hacienda dio un Problema');
@@ -288,13 +294,14 @@ export class AddSujetoExcluidoCHComponent {
 		});
 	}
 
-	clickSave2(): void {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	clickSave2(sello: string): void {
 		const d = new Date();
 		const n = d.getFullYear();
 		const ano = n.toString();
 		const vale = this.valeField.value as number;
 		const conse = this.listaVale.find((r) => r.CONSECUTIVO == vale)?.CONSECUTIVO || 0;
-
+		const deta = (this.detalleField.value as string) + ' //' + sello;
 		const docsSoporte = {
 			_vale: conse,
 			_linea: 0,
@@ -306,7 +313,7 @@ export class AddSujetoExcluidoCHComponent {
 			_monto: this.totalField.value as number,
 			_monot_vale: this.montoprovisionField.value as number,
 			_concepto: this.conceptodField.value as string,
-			_detalle: this.detalleField.value as string,
+			_detalle: deta,
 			_subtotal: this.subTotalField.value as number,
 			_impuesto1: this.ivaField.value as number,
 			_impuesto2: 0.0,

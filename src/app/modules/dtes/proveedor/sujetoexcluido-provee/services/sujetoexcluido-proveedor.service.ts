@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { IResponse } from '@app/shared/api-models-base-interface';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { IResponseConsecutivo, IResponseDTE14 } from '../model/sujetoExcluido_DTE_interface';
+import { IResponseConsecutivo, IResponseDTE14, IResponseDte14MH } from '../model/sujetoExcluido_DTE_interface';
 const URL_CONSECUTIVO = environment.host + '/dte/consecutivo';
 const URL_CONSECUTIVO_UPDATE = environment.host + '/dte/consUpdate';
 const URL_ENVIAR_SUJETO = environment.host + '/envioMH/dte14';
@@ -22,8 +22,8 @@ export class SujetoexcluidoProveedorService {
 		let url = URL_CONSECUTIVO_UPDATE + '/' + conse;
 		return this._httpClient.post<IResponse<number>>(url, conse);
 	}
-	postEnvioDTE(data: IResponseDTE14): Observable<IResponse<number>> {
+	postEnvioDTE(data: IResponseDTE14): Observable<IResponse<IResponseDte14MH[]>> {
 		let url = URL_ENVIAR_SUJETO + '/' + '1';
-		return this._httpClient.post<IResponse<number>>(url, data);
+		return this._httpClient.post<IResponse<IResponseDte14MH[]>>(url, data);
 	}
 }

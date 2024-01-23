@@ -292,7 +292,8 @@ export class AplicarCbPageComponent {
 			_codigo_impuesto: this.impuestoField.value as string,
 			_base_impuesto1: this.subTotalField.value as string,
 			_base_impuesto2: 0.0,
-			_id: this.editData.Dte_Id
+			_id: this.editData.Dte_Id,
+			_origen: 'JSON'
 		};
 		//guadarmos el detalle en doc_soporte
 

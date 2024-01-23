@@ -2,6 +2,9 @@ export interface IResponseConsecutivo {
 	CONSECUTIVO: string;
 	ULTIMO_VALOR: string;
 }
+export interface IResponseDte14MH {
+	selloRecibido: string;
+}
 export interface IResponseDTE14 {
 	correo: string;
 	tipoDocumento: string;

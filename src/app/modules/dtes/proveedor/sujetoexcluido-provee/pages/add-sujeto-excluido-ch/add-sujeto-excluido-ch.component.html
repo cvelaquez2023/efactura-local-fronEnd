@@ -116,7 +116,7 @@
 								<div id="content">
 									<mat-form-field appearance="outline">
 										<mat-label>Fecha Documento</mat-label>
-										<input matInput type="text" formControlName="fechadoc" readonly />
+										<input matInput type="text" formControlName="fechadoc" />
 									</mat-form-field>
 									<mat-form-field appearance="outline">
 										<mat-label>Tipo Doc</mat-label>
@@ -163,6 +163,7 @@
 
 									<mat-form-field appearance="outline">
 										<mat-label>Cuenta Cuenta </mat-label>
+
 										<mat-select formControlName="cuentaContable" (selectionChange)="selectionCuentaContable($event)">
 											<mat-option *ngFor="let item of listCentroCuenta" [value]="item.CUENTA_CONTABLE"
 												>{{ item.CUENTA_CONTABLE }}-{{ item.DESCRIPCION }}</mat-option

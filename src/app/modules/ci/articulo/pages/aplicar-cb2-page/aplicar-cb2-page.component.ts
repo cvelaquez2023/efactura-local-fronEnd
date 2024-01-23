@@ -114,7 +114,6 @@ export class AplicarCb2PageComponent {
 		this._service.getDteCp(this.editData.Dte_Id as number).subscribe({
 			next: (response) => {
 				this.datoCp = response.result;
-				console.log(this.datoCp);
 
 				//datalle 1
 				this.formAplicarCh.controls['fechadoc'].setValue(this.datoCp[0].fechaDoc);
@@ -198,15 +197,15 @@ export class AplicarCb2PageComponent {
 		this.formAplicarCh
 			.get('beneficionario')
 			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.BENEFICIARIO || '');
-		const fecha = this.listaVale.find((r) => r.CONSECUTIVO == vale)?.FECHA_EMISION || '';
-		const fechaformat = this.pipe.transform(fecha, 'dd/MM/YYY');
-		this.formAplicarCh.get('emision')?.setValue(fechaformat);
+		//const fecha = this.listaVale.find((r) => r.CONSECUTIVO == vale)?.FECHA_EMISION || '';
+		//const fechaformat = this.pipe.transform(fecha, 'dd/MM/YYY');
+		//this.formAplicarCh.get('emision')?.setValue(fechaformat);
 		this.formAplicarCh
 			.get('montoprovision')
-			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_CAJA || '');
+			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_CAJA || 0);
 		this.formAplicarCh
 			.get('montoliquidacion')
-			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_VALE || '');
+			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.MONTO_VALE || 0);
 
 		const disponible = (this.montoprovisionField.value as number) - (this.montoliquidacionField.value as number);
 		if (disponible < this.total) {
@@ -280,11 +279,10 @@ export class AplicarCb2PageComponent {
 			_base_impuesto2: 0.0,
 			_id: this.editData.Dte_Id,
 			_montoProvisional: this.montoprovisionField.value as number,
-			_montoDefinitivo: this.montoliquidacionField.value as number
+			_montoDefinitivo: this.montoliquidacionField.value as number,
+			_origen: 'JSON'
 		};
 		//guadarmos el detalle en doc_soporte
-
-		console.log(docsSoporte);
 
 		this._service.posDocSoporte(docsSoporte).subscribe({
 			next: (response) => {
@@ -292,6 +290,7 @@ export class AplicarCb2PageComponent {
 					this._snotifyService.success('Registro Guardado con Exito', {
 						position: SnotifyPosition.rightTop
 					});
+					this._dialogRef.close('updateCH');
 					this.btnAplicar = true;
 				}
 			}
