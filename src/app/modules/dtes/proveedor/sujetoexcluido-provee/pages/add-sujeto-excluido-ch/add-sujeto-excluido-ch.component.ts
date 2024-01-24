@@ -204,9 +204,9 @@ export class AddSujetoExcluidoCHComponent {
 		this.formAplicarCh
 			.get('beneficionario')
 			?.setValue(this.listaVale.find((r) => r.CONSECUTIVO == vale)?.BENEFICIARIO || '');
-		const fecha = this.listaVale.find((r) => r.CONSECUTIVO == vale)?.FECHA_EMISION || '';
-		const fechaformat = this.pipe.transform(fecha, 'dd/MM/YYY');
-		this.formAplicarCh.get('emision')?.setValue(fechaformat);
+		//const fecha = this.listaVale.find((r) => r.CONSECUTIVO == vale)?.FECHA_EMISION || '';
+		//const fechaformat = this.pipe.transform(fecha, 'dd/MM/YYY');
+		//this.formAplicarCh.get('emision')?.setValue(fechaformat);
 		this.formAplicarCh.get('montoprovision')?.setValue(this.editData.montoTotal);
 		this.formAplicarCh
 			.get('montoliquidacion')
@@ -283,7 +283,6 @@ export class AddSujetoExcluidoCHComponent {
 				if (response.success === true) {
 					//Enviamsos a guardar a Caja Chicca
 					// eslint-disable-next-line @typescript-eslint/no-unused-vars
-					console.log(response.result);
 					const selloRecibido = response.result[0].selloRecibido;
 					this.clickSave2(selloRecibido);
 					this._dialogRef.close('update');
@@ -331,7 +330,7 @@ export class AddSujetoExcluidoCHComponent {
 			_montoDefinitivo: this.montoliquidacionField.value as number
 		};
 		//guadarmos el detalle en doc_soporte
-
+		console.log(docsSoporte);
 		this._service.posDocSoporte(docsSoporte).subscribe({
 			next: (response) => {
 				if (response.success) {

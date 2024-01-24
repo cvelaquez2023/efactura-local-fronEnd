@@ -196,7 +196,7 @@ export class ListarSujetoExcluidoComponent implements OnInit, AfterViewInit {
 				monto: 0.0,
 				renta: 0.0,
 				total: 0.0,
-				fecha: '1980-01-01',
+				fecha: element.fecha_Emision,
 				dte: element.Dte
 			},
 			hacienda: 'S',
