@@ -165,6 +165,10 @@
 										<mat-label>Cuenta Cuenta </mat-label>
 
 										<mat-select formControlName="cuentaContable" (selectionChange)="selectionCuentaContable($event)">
+											<mat-form-field appearance="outline" class="lookup-search-input-filed">
+												<mat-label> <mat-icon>search</mat-icon>Buscar </mat-label>
+												<input (keyup)="onkey($event)" type="text" matInput />
+											</mat-form-field>
 											<mat-option *ngFor="let item of listCentroCuenta" [value]="item.CUENTA_CONTABLE"
 												>{{ item.CUENTA_CONTABLE }}-{{ item.DESCRIPCION }}</mat-option
 											>

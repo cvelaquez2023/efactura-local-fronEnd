@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
@@ -138,8 +140,15 @@ export class AddSujetoExcluidoCHComponent {
 		});
 	}
 
-	onkey(value: any) {
-		console.log(value);
+	onkey(event: any) {
+		this.listCentroCuenta = this.filterCuenta(event.target.value);
+		if (event.target.value == '') {
+			this._loadCuentaContable();
+		}
+	}
+	filterCuenta(value: string) {
+		let filter = value.toLowerCase();
+		return this.listCentroCuenta.filter((option: any) => option.DESCRIPCION.toLowerCase().includes(filter));
 	}
 	selectionConcepto(conpceto: any): void {
 		this.formAplicarCh
@@ -330,50 +339,6 @@ export class AddSujetoExcluidoCHComponent {
 			_montoDefinitivo: this.montoliquidacionField.value as number
 		};
 		//guadarmos el detalle en doc_soporte
-		console.log(docsSoporte);
-		this._service.posDocSoporte(docsSoporte).subscribe({
-			next: (response) => {
-				if (response.success) {
-					this._snotifyService.success('Registro Guardado con Exito', {
-						position: SnotifyPosition.rightTop
-					});
-					this.btnAplicar = true;
-				}
-			}
-		});
-	}
-
-	private guardarDocSoporte(doc: any): void {
-		const d = new Date();
-		const n = d.getFullYear().toString().substr(2);
-		const docsSoporte = {
-			_vale: doc,
-			_linea: 0,
-			_centro_costo: this.CentroCostoField.value as string,
-			_cuenta_contable: this.CuentaContableField.value as string,
-			_nit: this.nitField.value as string,
-			_doc_soporte: (this.dteField.value as string) + '-' + n,
-			_tipo: this.tipoDocField.value as string,
-			_monto: this.montoprovisionField.value as number,
-			_monot_vale: this.montoprovisionField.value as number,
-			_concepto: this.conceptodField.value as string,
-			_detalle: this.detalleField.value as string,
-			_subtotal: this.subTotalField.value as number,
-			_impuesto1: this.ivaField.value as number,
-			_impuesto2: 0.0,
-			_rubro1: this.fovialField.value as number,
-			_rubro2: this.cotransField.value as number,
-			_descuento: 0.0,
-			_subtipo: this.subtipoDocField.value as number,
-			_fecha: this.convertiFecha(this.emisionField.value as string),
-			_fecha_rigue: this.convertiFecha(this.emisionField.value as string),
-			_codigo_impuesto: this.impuestoField.value as string,
-			_base_impuesto1: this.subTotalField.value as string,
-			_base_impuesto2: 0.0,
-			_id: this.editData.Dte_Id
-		};
-		//guadarmos el detalle en doc_soporte
-
 		this._service.posDocSoporte(docsSoporte).subscribe({
 			next: (response) => {
 				if (response.success) {
